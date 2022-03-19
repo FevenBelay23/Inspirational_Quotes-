@@ -23,13 +23,23 @@ Project title: Inspirational Quotes
   Our app will have two roles Admin and users
   
   
-The users: are able to sign up by filling our registration form.
-           Are able to log in or log out of their account when they want to.
-           And they are able to read the motivational quotes whenever they 
-           want to as long as they Have logged in to their account.
+The users:
+
+   Are able to sign up by filling our registration form.
+   
+   Are able to log in to  their account when they want to.
+   
+   Are able to log out of their account when they want to.
+   
+   And they are able to read the motivational quotes whenever they  want to as long as they Have logged in to their account.
 					 
 					 
-The admin: Can read through the pages of motivational quotes.
-            Can add quotes to the page.
-            Can add delete quotes from the page.
-            Can update the quotes to the page 
+The admin: 
+
+   Can read through the pages of motivational quotes.
+   
+   Can add quotes to the page.
+   
+   Can add delete quotes from the page.
+   
+   Can update the quotes to the page 
