@@ -24,12 +24,12 @@ Project title: Inspirational Quotes
   
   
 The users: are able to sign up by filling our registration form.
-                     Are able to log in or log out of their account when they want to.
-                     And they are able to read the motivational quotes whenever they 
-                     want to as long as they Have logged in to their account.
+           Are able to log in or log out of their account when they want to.
+           And they are able to read the motivational quotes whenever they 
+           want to as long as they Have logged in to their account.
 					 
 					 
 The admin: Can read through the pages of motivational quotes.
-                       Can add quotes to the page.
-                       Can add delete quotes from the page.
-                      Can update the quotes to the page 
+            Can add quotes to the page.
+            Can add delete quotes from the page.
+            Can update the quotes to the page 
