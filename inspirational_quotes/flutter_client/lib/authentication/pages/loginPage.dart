@@ -17,6 +17,18 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../blocs/login/login_bloc.dart';
 
+class EmailFieldValidator {
+  static validate(String value) {
+    return value.isEmpty ? '* required' : null;
+  }
+}
+
+class PasswordFieldValidator {
+  static validate(String value) {
+    return value.isEmpty ? '* required' : null;
+  }
+}
+
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   final emailTextEditingController = TextEditingController();
@@ -111,12 +123,7 @@ class LoginPage extends StatelessWidget {
                     false,
                     true,
                     hintText: "Email",
-                    validator: (value) {
-                      if (!EmailValidator.validate(value!)) {
-                        return "invalid email";
-                      }
-                      return null;
-                    },
+                    validator: (value) => EmailFieldValidator.validate(value!),
                     controller: emailTextEditingController,
                   ),
                   const SizedBox(
@@ -127,12 +134,8 @@ class LoginPage extends StatelessWidget {
                     true,
                     false,
                     hintText: "Password",
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "* required";
-                      }
-                      return null;
-                    },
+                    validator: (value) =>
+                        PasswordFieldValidator.validate(value!),
                     controller: passwordController,
                   ),
                   const SizedBox(

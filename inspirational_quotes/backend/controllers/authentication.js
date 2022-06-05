@@ -89,7 +89,7 @@ export const login = async (req, res) => {
         { currentUser },
         process.env.ACCESS_TOKEN_SECRET,
         {
-          expiresIn: '2h',
+          expiresIn: '48h',
         },
       )
       console.log('Login success')

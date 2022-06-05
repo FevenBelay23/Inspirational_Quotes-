@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_client/admin/dataproviders/remoteDataProvider.dart';
 import 'package:flutter_client/admin/models/quote.dart';
 import 'package:flutter_client/authentication/blocs/login/login_bloc.dart';
 import 'package:flutter_client/widgets/WidgetFunctions.dart';
@@ -43,7 +42,12 @@ class _AdminHomepageState extends State<AdminHomepage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => setSharedPreference());
+    Future.delayed(Duration.zero, () async {
+      setSharedPreference();
+    });
+    searchController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -170,7 +174,7 @@ class _AdminHomepageState extends State<AdminHomepage> {
                   return Container();
                 },
               ),
-              // bottomNavigationBar: const TabsScreen(),
+              
               drawer: CustomDrawer(children: [
                 DrawerHeader(
                   decoration: const BoxDecoration(
@@ -391,8 +395,8 @@ class QuoteAddAndUpdateForm extends StatefulWidget {
 }
 
 class _QuoteAddAndUpdateFormState extends State<QuoteAddAndUpdateForm> {
-  var categories = ["category 1", "category 2", "category 3", "category 4"];
-  var selectedCategory = "category 1";
+  var categories = ["Depression", "Anxiety", "Fear", "Boost mood"];
+  var selectedCategory = "Depression";
   var formKey = GlobalKey<FormState>();
   var authorController = TextEditingController();
   var bodyController = TextEditingController();

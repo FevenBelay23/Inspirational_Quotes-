@@ -23,7 +23,28 @@ import {
 } from '../controllers/quote.js'
 dotenv.config()
 const router = express.Router()
-
+router.get("/test",(req,res)=>{
+  return res.status(200).send({employees:[
+    {
+      "id":1,
+      "email":"michael.lawson@demo.io",
+      "firstName":"Michael",
+      "lastName":"Lawson"
+    },
+    {
+      "id":2,
+      "email":"dave@gmail.io",
+      "firstName":"Dawit",
+      "lastName":"T"
+    },
+    {
+      "id":3,
+      "email":"alayu@gmai.com",
+      "firstName":"Alayu",
+      "lastName":"E"
+    }
+  ]})
+})
 router.get('/getallusers', [authMiddleWare], getAllUsers)
 router.get('/getuser/:id', [authMiddleWare, getUser], getSingleUser)
 router.post('/signup', signUp)

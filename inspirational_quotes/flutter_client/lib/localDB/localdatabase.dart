@@ -62,7 +62,11 @@ class LocalCache {
     if (type == "favorites") {
       print("get all Favorites is comming");
       final res = await db.rawQuery('SELECT * FROM Favorite');
-      return res.map((quote) => Quote.fromJson(quote)).toList();
+      return res.map((quote) {
+        var data = Quote.fromJson(quote);
+        data.id = quote['id'].toString();
+        return data;
+      }).toList();
     } else {
       print("get all quotes request is comming");
       final res = await db.rawQuery('SELECT * FROM Quote');

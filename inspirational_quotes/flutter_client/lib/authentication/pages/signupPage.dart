@@ -12,6 +12,17 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/user.dart';
 
+class PasswordValidator {
+  static validate(String value) {
+    if (value.isEmpty) {
+      return '* required';
+    } else if (value.length < 6) {
+      return "short password";
+    }
+    return null;
+  }
+}
+
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
 
@@ -110,14 +121,7 @@ class _SignupPageState extends State<SignupPage> {
                     true,
                     false,
                     hintText: "Password",
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "* Required";
-                      } else if (value.length < 6) {
-                        return "short password";
-                      }
-                      return null;
-                    },
+                    validator: (value) => PasswordValidator.validate(value!),
                     controller: passwordController,
                   ),
                   customTextField(

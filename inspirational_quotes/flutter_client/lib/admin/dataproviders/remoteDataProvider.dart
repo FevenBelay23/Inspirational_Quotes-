@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:email_validator/email_validator.dart';
+// import 'package:email_validator/email_validator.dart';
 import 'package:flutter_client/admin/models/quote.dart';
 import 'package:flutter_client/localDB/localdatabase.dart';
 import 'package:flutter_client/utilities/urls.dart';

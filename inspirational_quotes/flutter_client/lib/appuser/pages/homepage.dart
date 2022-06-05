@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_cast
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_client/admin/pages/homepage.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_client/utilities/ColorPallets.dart';
 import 'package:flutter_client/widgets/WidgetFunctions.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../admin/blocs/quote/quote_bloc.dart';
 import '../../admin/models/quote.dart';
@@ -24,8 +27,20 @@ class _AppUserHomepageState extends State<AppUserHomepage> {
   late List<Map<String, dynamic>> _pages;
   var searchController = TextEditingController();
   var selectedCategory = "";
+  SharedPreferences? prefs;
+  Map<String, dynamic> userInfo = {};
+  setSharedPreference() async {
+    print("hello");
+    prefs = await SharedPreferences.getInstance();
+    String userPref = prefs!.getString('loggedUserInfo') ?? "";
+    userInfo = jsonDecode(userPref) as Map<String, dynamic>;
+  }
+
   @override
   void initState() {
+    Future.delayed(Duration.zero, () {
+      setSharedPreference();
+    });
     searchController.addListener(() {
       setState(() {});
     });
@@ -46,30 +61,29 @@ class _AppUserHomepageState extends State<AppUserHomepage> {
 
   var categories = [
     Category(
-      title: "category 1",
+      title: "Depression",
       color: Colors.purple,
     ),
     Category(
-      title: "category 2",
+      title: "Anxiety",
       color: Colors.red,
     ),
     Category(
-      title: "category 3",
+      title: "Fear",
       color: Colors.orange,
     ),
     Category(
-      title: "category 4",
+      title: "Boost mood",
       color: Colors.amber,
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
-    var loggedUserEmail = "";
-    var token = "";
+    var loggedUserEmail = userInfo['loggedUserEmail'] ?? "";
     var state = BlocProvider.of<LoginBloc>(context).state;
     if (state is LoginSuccess) {
       loggedUserEmail = state.loggedUser.email;
-      token = state.token;
     }
     return WillPopScope(
       onWillPop: () async => false,
@@ -96,9 +110,12 @@ class _AppUserHomepageState extends State<AppUserHomepage> {
                         ),
               )
               .toList();
+
           _pages = [
             {
               "page": MyHomePage(
+                userId: userInfo['id'],
+                token: userInfo['token'],
                 quotes: quotes,
               ),
               "title": "Home",
@@ -154,7 +171,11 @@ class _AppUserHomepageState extends State<AppUserHomepage> {
               ),
             ),
             body: _selectedPageIndex == 0
-                ? MyHomePage(quotes: quotes)
+                ? MyHomePage(
+                    quotes: quotes,
+                    userId: userInfo['id'],
+                    token: userInfo['token'],
+                  )
                 : _selectedPageIndex == 1
                     ? Container(
                         margin: const EdgeInsets.only(top: 25),
@@ -297,19 +318,17 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({
     Key? key,
     required this.quotes,
+    required this.token,
+    required this.userId,
   }) : super(key: key);
   final List<Quote> quotes;
+  final String token;
+  final String userId;
   @override
   Widget build(BuildContext context) {
     List<Quote> favorites = [];
     var loginState = BlocProvider.of<LoginBloc>(context).state;
     var favoriteQuotesState = BlocProvider.of<FavoriteBloc>(context).state;
-    var id = "";
-    var token = "";
-    if (loginState is LoginSuccess) {
-      token = loginState.token;
-      id = loginState.loggedUser.id!;
-    }
     if (favoriteQuotesState is FavoriteQuotesFetched) {
       favorites = favoriteQuotesState.quotes;
     }
@@ -319,6 +338,14 @@ class MyHomePage extends StatelessWidget {
       print(
         favorites.any((favorite) => favorite.id == item.id),
       );
+    }
+    print("favorites");
+    for (var item in favorites) {
+      print(item);
+    }
+    print("quotes");
+    for (var item in quotes) {
+      print(item);
     }
     int i = 0;
     return quotes.isEmpty
@@ -364,7 +391,7 @@ class MyHomePage extends StatelessWidget {
                       listener: (context, state) {
                         if (state is FavoriteActionSucceeded && i == index) {
                           context.read<FavoriteBloc>().add(
-                                GetFavoriteQuotes(userId: id, token: token),
+                                GetFavoriteQuotes(userId: userId, token: token),
                               );
                         }
                         if (state is FavoriteQuotesFetched) {
@@ -393,12 +420,12 @@ class MyHomePage extends StatelessWidget {
                                     RemoveFromMyFavorites(
                                         token: token,
                                         quoteId: quotes[index].id!,
-                                        userId: id))
+                                        userId: userId))
                                 : context.read<FavoriteBloc>().add(
                                       AddToMyFavorites(
                                           token: token,
                                           quoteId: quotes[index].id!,
-                                          userId: id),
+                                          userId: userId),
                                     );
                           },
                           icon: Icon(
@@ -439,19 +466,19 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   var categories = [
     Category(
-      title: "category 1",
+      title: "Depression",
       color: Colors.purple,
     ),
     Category(
-      title: "category 2",
+      title: "Anxiety",
       color: Colors.red,
     ),
     Category(
-      title: "category 3",
+      title: "Fear",
       color: Colors.orange,
     ),
     Category(
-      title: "category 4",
+      title: "Boost mood",
       color: Colors.amber,
     ),
   ];

@@ -42,6 +42,12 @@ dependencies:
   email_validator: ^2.0.1
   top_snackbar_flutter: ^1.1.1
   nb_utils: ^4.5.2
+  dio: ^4.0.6
+  path: ^1.8.1
+  path_provider: ^2.0.10
+  sqflite: ^2.0.2+1
+  shared_preferences: ^2.0.15
+  bloc_test: ^9.0.3
 
 dev_dependencies:
   flutter_test:
