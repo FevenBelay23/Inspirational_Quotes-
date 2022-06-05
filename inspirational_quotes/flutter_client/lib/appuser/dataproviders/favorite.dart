@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_client/admin/models/quote.dart';
+import 'package:flutter_client/localDB/localdatabase.dart';
 import 'package:flutter_client/utilities/urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -81,19 +82,17 @@ class FavoriteDataProvider {
         },
       );
       if (response.statusCode == 200) {
-        List<Quote> favorites = [];
         var quotes = await jsonDecode(response.body)['favorites'];
+        LocalCache.db.deleteAllQuotes(type: "favorites");
         for (var item in quotes) {
-          favorites.add(
-            Quote.fromJson(item),
-          );
+          LocalCache.db.createQuote(Quote.fromJson(item), type: "favorites");
         }
-        return favorites;
       } else {
         throw Exception("Error while feching favorites");
       }
     } catch (e) {
       throw Exception("Error while feching favorites");
     }
+    return await LocalCache.db.getAllQuotes(type: "favorites");
   }
 }
