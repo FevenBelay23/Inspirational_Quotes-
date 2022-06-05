@@ -14,7 +14,8 @@ class AuthDataProvider {
         Uri.parse('$url/signup'),
         headers: {
           "accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*"
         },
         body: json.encode(user.toJson()),
       );
@@ -51,7 +52,8 @@ class AuthDataProvider {
         Uri.parse("$url/login"),
         headers: {
           "accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*"
         },
         body: json.encode(loginModel.toJson()),
       );

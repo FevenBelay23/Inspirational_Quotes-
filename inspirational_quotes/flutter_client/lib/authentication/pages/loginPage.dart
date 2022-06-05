@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_client/widgets/customButton.dart';
 import 'package:flutter_client/widgets/customeTextField.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -23,8 +26,10 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccess) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            // ignore: use_build_context_synchronously
             showTopSnackBar(
               context,
               SizedBox(
@@ -37,9 +42,21 @@ class LoginPage extends StatelessWidget {
               additionalTopPadding: 0,
               displayDuration: const Duration(milliseconds: 500),
             );
+            Map<String, dynamic> userData = {
+              "token": state.token,
+              "id": state.loggedUser.id!,
+              "role": state.loggedUser.role,
+              "loggedUserEmail": state.loggedUser.email
+            };
+            await prefs.setString(
+              "loggedUserInfo",
+              jsonEncode(userData),
+            );
+            print("shared prefs success");
             context.read<QuoteBloc>().add(
                   GetAllQuotes(token: state.token),
                 );
+            //Authorization
             if (state.loggedUser.role == "admin") {
               GoRouter.of(context).go("/admin");
             } else {
