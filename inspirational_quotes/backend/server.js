@@ -10,5 +10,5 @@ dbConfig()
 app.use('/api/v1', Router)
 
 app.listen(process.env.PORT, () =>
-  console.log(`Server is listening at http://192.168.56.1://${process.env.PORT}`),
+  console.log(`Server is listening at http://192.168.41.64://${process.env.PORT}`),
 )
